@@ -1,26 +1,24 @@
 import React, {useEffect, useState} from 'react'
+import {RoomType} from '../../q1-main/m2-quest/Quest'
+import {v1} from 'uuid'
 
 type RoomPropsType = {
-    room: {
-        hiddenTitle: string
-        text: string
-        buttons: {
-            title: string
-            next: string
-        }[]
-    }
+    room: RoomType
     isEditMode: boolean
     isSave: boolean
     setSave: () => void
     setRoom: (r: string) => void
+    rooms: RoomType[]
 }
 
 const Room: React.FC<RoomPropsType> = (
-    {room, setRoom, isEditMode, isSave, setSave}
+    {room, setRoom, isEditMode, isSave, setSave, rooms}
 ) => {
     const {hiddenTitle, text, buttons} = room
     const [newText, setText] = useState(text)
     const [newButtons, setButtons] = useState(buttons)
+
+    console.log(rooms)
 
     useEffect(() => {
         if (isSave) {
@@ -39,6 +37,10 @@ const Room: React.FC<RoomPropsType> = (
         }
     }, [isEditMode, text, newText, setText, setButtons, newButtons, buttons])
 
+    if (!rooms.find(x => x.hiddenTitle === 'new-room')) {
+        rooms.push({_id: v1(), hiddenTitle: 'new-room', text: '', buttons: []})
+    }
+
     return (
         <div>
             text:
@@ -52,11 +54,11 @@ const Room: React.FC<RoomPropsType> = (
             <hr/>
             buttons:
             <div>
-                {newButtons.map((b, i) => {
+                {newButtons.map(b => {
                     return !isEditMode
-                        ? <button key={b.next} onClick={() => setRoom(b.next)}>{b.title}</button>
+                        ? <button key={b._id} onClick={() => setRoom(b.next)}>{b.title}</button>
                         : (
-                            <div>
+                            <div key={b._id}>
                                 <input
                                     value={b.title}
                                     onChange={e => {
@@ -64,17 +66,24 @@ const Room: React.FC<RoomPropsType> = (
                                         setButtons([...newButtons])
                                     }}
                                 />
-                                <input
+                                <select
                                     value={b.next}
                                     onChange={e => {
                                         b.next = e.currentTarget.value
                                         setButtons([...newButtons])
                                     }}
-                                />
+                                >
+                                    {rooms
+                                        // .filter(r => r.hiddenTitle !== hiddenTitle)
+                                        .map(r => (
+                                                <option key={r._id} value={r._id}>{r.hiddenTitle}</option>
+                                            )
+                                        )}
+                                </select>
                                 <button
                                     onClick={
                                         () => setButtons(
-                                            newButtons.filter((x, ii) => i !== ii)
+                                            newButtons.filter(x => x._id !== b._id)
                                         )
                                     }
                                 >del
@@ -85,7 +94,11 @@ const Room: React.FC<RoomPropsType> = (
 
                 {isEditMode && (
                     <div>
-                        <button onClick={() => setButtons([...newButtons, {next: '', title: ''}])}>add</button>
+                        <button
+                            onClick={() => setButtons([...newButtons, {_id: v1(), next: room._id, title: ''}])}
+                        >
+                            add
+                        </button>
                     </div>
                 )}
             </div>
