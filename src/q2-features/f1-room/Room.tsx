@@ -20,17 +20,24 @@ const Room: React.FC<RoomPropsType> = (
 ) => {
     const {hiddenTitle, text, buttons} = room
     const [newText, setText] = useState(text)
-
-    useEffect(() => {
-        if (newText !== text && !isEditMode) setText(text)
-    }, [isEditMode, text, newText, setText])
+    const [newButtons, setButtons] = useState(buttons)
 
     useEffect(() => {
         if (isSave) {
             room.text = newText
+            room.buttons = newButtons
             setSave()
         }
-    }, [room, setSave, isSave, newText])
+    }, [room, setSave, isSave, newText, newButtons])
+
+    useEffect(() => {
+        if (!isEditMode) {
+            if (newText !== text) setText(text)
+            if (newButtons !== buttons) setButtons(buttons)
+        } else {
+            if (newButtons === buttons) setButtons(buttons.map(b => ({...b})))
+        }
+    }, [isEditMode, text, newText, setText, setButtons, newButtons, buttons])
 
     return (
         <div>
@@ -45,11 +52,42 @@ const Room: React.FC<RoomPropsType> = (
             <hr/>
             buttons:
             <div>
-                {buttons.map(b => {
+                {newButtons.map((b, i) => {
                     return !isEditMode
                         ? <button key={b.next} onClick={() => setRoom(b.next)}>{b.title}</button>
-                        : 1
+                        : (
+                            <div>
+                                <input
+                                    value={b.title}
+                                    onChange={e => {
+                                        b.title = e.currentTarget.value
+                                        setButtons([...newButtons])
+                                    }}
+                                />
+                                <input
+                                    value={b.next}
+                                    onChange={e => {
+                                        b.next = e.currentTarget.value
+                                        setButtons([...newButtons])
+                                    }}
+                                />
+                                <button
+                                    onClick={
+                                        () => setButtons(
+                                            newButtons.filter((x, ii) => i !== ii)
+                                        )
+                                    }
+                                >del
+                                </button>
+                            </div>
+                        )
                 })}
+
+                {isEditMode && (
+                    <div>
+                        <button onClick={() => setButtons([...newButtons, {next: '', title: ''}])}>add</button>
+                    </div>
+                )}
             </div>
         </div>
     )
