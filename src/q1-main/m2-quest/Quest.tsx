@@ -32,17 +32,30 @@ const rooms = [
 
 const Quest = () => {
     const [checkedRoom, setRoom] = useState(rooms[0].hiddenTitle)
+    const [isEditMode, setEditMode] = useState(false)
+    const [isSave, setSave] = useState(false)
 
     const r = rooms.find(x => x.hiddenTitle === checkedRoom) || rooms[0]
 
     return (
         <div className={s.quest}>
+            {!isEditMode
+                ? <span onClick={() => setEditMode(true)}>edit</span>
+                : (
+                    <div onClick={() => setEditMode(false)}>
+                        <span onClick={() => setSave(true)}>save</span> cancel
+                    </div>
+                )
+            }
+            <hr/>
+
             <Room
                 key={r.hiddenTitle}
-                text={r.text}
-                buttons={r.buttons}
-                hiddenTitle={r.hiddenTitle}
+                room={r}
                 setRoom={setRoom}
+                isEditMode={isEditMode}
+                isSave={isSave}
+                setSave={() => setSave(false)}
             />
         </div>
     )
