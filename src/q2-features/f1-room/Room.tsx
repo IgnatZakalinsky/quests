@@ -15,6 +15,7 @@ const Room: React.FC<RoomPropsType> = (
     {room, setRoom, isEditMode, isSave, setSave, rooms}
 ) => {
     const {hiddenTitle, text, buttons} = room
+    const [newTitle, setTitle] = useState(hiddenTitle)
     const [newText, setText] = useState(text)
     const [newButtons, setButtons] = useState(buttons)
 
@@ -24,18 +25,20 @@ const Room: React.FC<RoomPropsType> = (
         if (isSave) {
             room.text = newText
             room.buttons = newButtons
+            room.hiddenTitle = newTitle
             setSave()
         }
-    }, [room, setSave, isSave, newText, newButtons])
+    }, [room, setSave, isSave, newText, newButtons, newTitle])
 
     useEffect(() => {
         if (!isEditMode) {
             if (newText !== text) setText(text)
+            if (newTitle !== hiddenTitle) setTitle(hiddenTitle)
             if (newButtons !== buttons) setButtons(buttons)
         } else {
             if (newButtons === buttons) setButtons(buttons.map(b => ({...b})))
         }
-    }, [isEditMode, text, newText, setText, setButtons, newButtons, buttons])
+    }, [isEditMode, text, newText, setText, setButtons, newButtons, buttons, newTitle, hiddenTitle, setTitle])
 
     if (!rooms.find(x => x.hiddenTitle === 'new-room')) {
         rooms.push({_id: v1(), hiddenTitle: 'new-room', text: '', buttons: []})
@@ -43,6 +46,8 @@ const Room: React.FC<RoomPropsType> = (
 
     return (
         <div>
+            {isEditMode && <div><textarea value={newTitle} onChange={e => setTitle(e.currentTarget.value)}/></div>}
+
             text:
             <div>
                 {!isEditMode
@@ -59,7 +64,7 @@ const Room: React.FC<RoomPropsType> = (
                         ? <button key={b._id} onClick={() => setRoom(b.next)}>{b.title}</button>
                         : (
                             <div key={b._id}>
-                                <input
+                                <textarea
                                     value={b.title}
                                     onChange={e => {
                                         b.title = e.currentTarget.value
