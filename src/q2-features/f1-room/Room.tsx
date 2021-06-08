@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
-import {RoomType} from '../../q1-main/m2-quest/Quest'
 import {v1} from 'uuid'
+import {RoomType} from '../../q1-main/m2-quest/RoomType'
+import EditButton from './EditButton'
 
 type RoomPropsType = {
     room: RoomType
@@ -19,26 +20,29 @@ const Room: React.FC<RoomPropsType> = (
     const [newText, setText] = useState(text)
     const [newButtons, setButtons] = useState(buttons)
 
-    console.log(rooms)
-
-    useEffect(() => {
-        if (isSave) {
-            room.text = newText
-            room.buttons = newButtons
-            room.hiddenTitle = newTitle
-            setSave()
-        }
-    }, [room, setSave, isSave, newText, newButtons, newTitle])
+    // console.log(rooms)
+    // @ts-ignore
+    window.rooms = rooms
 
     useEffect(() => {
         if (!isEditMode) {
+            if (isSave) {
+                room.text = newText
+                room.buttons = newButtons
+                room.hiddenTitle = newTitle
+                setSave()
+            }
+
             if (newText !== text) setText(text)
             if (newTitle !== hiddenTitle) setTitle(hiddenTitle)
             if (newButtons !== buttons) setButtons(buttons)
         } else {
             if (newButtons === buttons) setButtons(buttons.map(b => ({...b})))
         }
-    }, [isEditMode, text, newText, setText, setButtons, newButtons, buttons, newTitle, hiddenTitle, setTitle])
+    }, [
+        isEditMode, text, newText, setText, setButtons, newButtons, buttons, newTitle, hiddenTitle, setTitle, room,
+        setSave, isSave
+    ])
 
     if (!rooms.find(x => x.hiddenTitle === 'new-room')) {
         rooms.push({_id: v1(), hiddenTitle: 'new-room', text: '', buttons: []})
@@ -62,39 +66,7 @@ const Room: React.FC<RoomPropsType> = (
                 {newButtons.map(b => {
                     return !isEditMode
                         ? <button key={b._id} onClick={() => setRoom(b.next)}>{b.title}</button>
-                        : (
-                            <div key={b._id}>
-                                <textarea
-                                    value={b.title}
-                                    onChange={e => {
-                                        b.title = e.currentTarget.value
-                                        setButtons([...newButtons])
-                                    }}
-                                />
-                                <select
-                                    value={b.next}
-                                    onChange={e => {
-                                        b.next = e.currentTarget.value
-                                        setButtons([...newButtons])
-                                    }}
-                                >
-                                    {rooms
-                                        // .filter(r => r.hiddenTitle !== hiddenTitle)
-                                        .map(r => (
-                                                <option key={r._id} value={r._id}>{r.hiddenTitle}</option>
-                                            )
-                                        )}
-                                </select>
-                                <button
-                                    onClick={
-                                        () => setButtons(
-                                            newButtons.filter(x => x._id !== b._id)
-                                        )
-                                    }
-                                >del
-                                </button>
-                            </div>
-                        )
+                        : <EditButton rooms={rooms} newButtons={newButtons} setButtons={setButtons} b={b}/>
                 })}
 
                 {isEditMode && (
