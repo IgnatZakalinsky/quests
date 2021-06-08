@@ -66,7 +66,7 @@ const Room: React.FC<RoomPropsType> = (
                 {newButtons.map(b => {
                     return !isEditMode
                         ? <button key={b._id} onClick={() => setRoom(b.next)}>{b.title}</button>
-                        : <EditButton rooms={rooms} newButtons={newButtons} setButtons={setButtons} b={b}/>
+                        : <EditButton key={b._id} rooms={rooms} newButtons={newButtons} setButtons={setButtons} b={b}/>
                 })}
 
                 {isEditMode && (

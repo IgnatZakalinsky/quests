@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useRef} from 'react'
 import {RoomType} from './RoomType'
 import {v1} from 'uuid'
 
@@ -6,18 +6,32 @@ type GetRoomsPropsType = {
     setRooms: (r: RoomType[]) => void
     setRoom: (id: string) => void
     setFileName: (n: string) => void
+    setFile: (f: FileList | null) => void
+    file: FileList | null
 }
 
-const GetRooms: React.FC<GetRoomsPropsType> = ({setRoom, setRooms, setFileName}) => {
+const GetRooms: React.FC<GetRoomsPropsType> = ({setRoom, setRooms, setFileName, setFile, file}) => {
+    const ref = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+        if (ref?.current?.files && file) {
+            // const dt = new DataTransfer()
+            // // dt.items.add(new File(['text'], 'primer.txt', {type: 'text/plain'}))
+            // dt.items.add(file)
+            ref.current.files = file
+        }
+    }, [ref, file])
+
+
     return (
         <input
             type={'file'}
             accept={'.json'}
+            ref={ref}
             onChange={e => {
                 if (e.currentTarget.files && e.currentTarget.files[0]) {
-                    const file = e.currentTarget.files[0]
-                    if (file.type === 'application/json') {
-
+                    const nFile = e.currentTarget.files
+                    if (nFile[0].type === 'application/json') {
                         const reader = new FileReader()
                         reader.onloadend = () => {
                             const newRooms: any = JSON.parse(reader.result + '')
@@ -41,10 +55,11 @@ const GetRooms: React.FC<GetRoomsPropsType> = ({setRoom, setRooms, setFileName})
 
                                 setRooms(newRooms)
                                 setRoom(newRooms[0]._id)
-                                setFileName(file.name)
+                                setFileName(nFile[0].name)
+                                setFile(nFile)
                             } else alert('not rooms!')
                         }
-                        reader.readAsText(file)
+                        reader.readAsText(nFile[0])
                     } else alert('not json!')
                 }
             }}

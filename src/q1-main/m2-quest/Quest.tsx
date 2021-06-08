@@ -7,6 +7,7 @@ import {v1} from 'uuid'
 
 const Quest = () => {
     const [rooms, setRooms] = useState(defRooms)
+    const [file, setFile] = useState<FileList | null>(null)
     const [fileName, setFileName] = useState('defRooms.json')
     const [checkedRoom, setRoom] = useState(rooms[0]._id)
     const [isEditMode, setEditMode] = useState(false)
@@ -24,7 +25,8 @@ const Quest = () => {
     const save = () => {
         setSave(true)
         setEditMode(false)
-
+    }
+    const saveInFile = () => {
         const link = document.createElement('a')
         link.href = 'data:text/plain;content-disposition=attachment;filename=file,' + JSON.stringify(rooms)
         link.download = fileName
@@ -45,7 +47,14 @@ const Quest = () => {
                         </button>
                         <button onClick={() => setEditMode(true)}>edit</button>
 
-                        <GetRooms setRooms={setRooms} setRoom={setRoom} setFileName={setFileName}/>
+                        <GetRooms
+                            setRooms={setRooms}
+                            setRoom={setRoom}
+                            setFileName={setFileName}
+                            setFile={setFile}
+                            file={file}
+                        />
+                        <button onClick={saveInFile}>save in file</button>
                     </div>
                 ) : (
                     <div>
