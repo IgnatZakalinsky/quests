@@ -3,6 +3,7 @@ import s from './Quest.module.css'
 import Room from '../../q2-features/f1-room/Room'
 import {defRooms} from './RoomType'
 import GetRooms from './GetRooms'
+import {v1} from 'uuid'
 
 const Quest = () => {
     const [rooms, setRooms] = useState(defRooms)
@@ -17,6 +18,13 @@ const Quest = () => {
             {!isEditMode
                 ? (
                     <div>
+                        <button
+                            onClick={() => {
+                                const _id = v1()
+                                setRooms([{_id, hiddenTitle: 'new-room', text: '', buttons: []}])
+                                setRoom(_id)
+                            }}
+                        >new quest</button>
                         <button onClick={() => setEditMode(true)}>edit</button>
 
                         <GetRooms setRooms={setRooms} setRoom={setRoom}/>
