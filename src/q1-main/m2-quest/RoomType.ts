@@ -1,5 +1,3 @@
-import {v1} from 'uuid'
-
 export type NextButtonType = {
     _id: string
     title: string
@@ -13,35 +11,62 @@ export type RoomType = {
     buttons: NextButtonType[]
 }
 
-const v = [v1(), v1(), v1(), v1()] // for tests
-
 export const defRooms: RoomType[] = [
     {
-        _id: v[0],
-        hiddenTitle: 'x1',
-        text: 'x1',
         buttons: [
-            {_id: v1(), title: 'x2', next: v[1]},
-            {_id: v1(), title: 'x3', next: v[2]},
+            {
+                _id: 'b8c38d00-c859-11eb-ac91-3933f47cd1ad',
+                next: '1131f2b0-c85a-11eb-ac91-3933f47cd1ad',
+                title: 'start game'
+            },
+            {
+                _id: 'feea8900-c859-11eb-ac91-3933f47cd1ad',
+                next: '5b62de30-c85a-11eb-ac91-3933f47cd1ad',
+                title: 'all rooms for dev'
+            },
         ],
+        hiddenTitle: 'pre-start-room',
+        text: 'pre-start room for better dev (check all rooms) and text about quest',
+        _id: 'a7c19ba0-c859-11eb-ac91-3933f47cd1ad'
     },
     {
-        _id: v[1],
-        hiddenTitle: 'x2',
-        text: 'x2',
         buttons: [
-            {_id: v1(), title: 'x1', next: v[0]},
-            {_id: v1(), title: 'x3', next: v[2]},
+            {_id: '47bd1d00-c85a-11eb-ac91-3933f47cd1ad', next: '4fb1c1f0-c85f-11eb-96dd-3d06ece4f7a0', title: 'next'},
+            {_id: '4d799e80-c85a-11eb-ac91-3933f47cd1ad', next: 'a7c19ba0-c859-11eb-ac91-3933f47cd1ad', title: 'exit'},
         ],
+        hiddenTitle: 'start-room',
+        text: 'quest started...',
+        _id: '1131f2b0-c85a-11eb-ac91-3933f47cd1ad'
     },
     {
-        _id: v[2],
-        hiddenTitle: 'x3',
-        text: 'x3',
         buttons: [
-            {_id: v1(), title: 'x2', next: v[1]},
-            {_id: v1(), title: 'x1', next: v[0]},
+            {
+                _id: '39c12660-c85f-11eb-96dd-3d06ece4f7a0',
+                next: 'a7c19ba0-c859-11eb-ac91-3933f47cd1ad',
+                title: 'pre-start-room'
+            },
+            {
+                _id: '4386fb20-c85f-11eb-96dd-3d06ece4f7a0',
+                next: '1131f2b0-c85a-11eb-ac91-3933f47cd1ad',
+                title: 'start-room'
+            },
+            {
+                _id: '4b175240-c85f-11eb-96dd-3d06ece4f7a0',
+                next: '4fb1c1f0-c85f-11eb-96dd-3d06ece4f7a0',
+                title: 'new-room'
+            },
         ],
+        hiddenTitle: 'all-rooms',
+        text: 'button in all rooms for dev',
+        _id: '5b62de30-c85a-11eb-ac91-3933f47cd1ad',
+    },
+    {
+        buttons: [
+            {_id: '609b2240-c85f-11eb-96dd-3d06ece4f7a0', next: 'a7c19ba0-c859-11eb-ac91-3933f47cd1ad', title: 'exit'},
+        ],
+        hiddenTitle: 'new-room',
+        text: '',
+        _id: '4fb1c1f0-c85f-11eb-96dd-3d06ece4f7a0'
     },
 
 ]
