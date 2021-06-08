@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {v1} from 'uuid'
 import {RoomType} from '../../q1-main/m2-quest/RoomType'
 import EditButton from './EditButton'
+import s from './Room.module.css'
 
 type RoomPropsType = {
     room: RoomType
@@ -50,18 +51,23 @@ const Room: React.FC<RoomPropsType> = (
 
     return (
         <div>
-            {isEditMode && <div><textarea value={newTitle} onChange={e => setTitle(e.currentTarget.value)}/></div>}
+            {isEditMode && (
+                <div>
+                    <div className={s.gray}>room name:</div>
+                    <textarea className={s.w50} value={newTitle} onChange={e => setTitle(e.currentTarget.value)}/>
+                </div>
+            )}
 
-            text:
+            <div className={s.gray}>text:</div>
             <div>
                 {!isEditMode
                     ? text
-                    : <textarea value={newText} onChange={e => setText(e.currentTarget.value)}/>
+                    : <textarea className={s.textarea} value={newText} onChange={e => setText(e.currentTarget.value)}/>
                 }
             </div>
 
             <hr/>
-            buttons:
+            <div className={s.gray}>buttons:</div>
             <div>
                 {newButtons.map(b => {
                     return !isEditMode

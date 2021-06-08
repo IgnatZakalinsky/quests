@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import {RoomType} from './RoomType'
 import {v1} from 'uuid'
 
@@ -10,8 +10,11 @@ type GetRoomsPropsType = {
     file: FileList | null
 }
 
-const GetRooms: React.FC<GetRoomsPropsType> = ({setRoom, setRooms, setFileName, setFile, file}) => {
+const GetRooms: React.FC<GetRoomsPropsType> = (
+    {setRoom, setRooms, setFileName, setFile, file}
+) => {
     const ref = useRef<HTMLInputElement>(null)
+    const [re, setRe] = useState(false)
 
     useEffect(() => {
         if (ref?.current?.files && file) {
@@ -20,7 +23,7 @@ const GetRooms: React.FC<GetRoomsPropsType> = ({setRoom, setRooms, setFileName, 
             // dt.items.add(file)
             ref.current.files = file
         }
-    }, [ref, file])
+    }, [ref, file, re])
 
 
     return (
@@ -29,6 +32,7 @@ const GetRooms: React.FC<GetRoomsPropsType> = ({setRoom, setRooms, setFileName, 
             accept={'.json'}
             ref={ref}
             onChange={e => {
+                setRe(r => !r)
                 if (e.currentTarget.files && e.currentTarget.files[0]) {
                     const nFile = e.currentTarget.files
                     if (nFile[0].type === 'application/json') {

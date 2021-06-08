@@ -45,7 +45,8 @@ const Quest = () => {
                             onClick={newQuest}
                         >new quest
                         </button>
-                        <button onClick={() => setEditMode(true)}>edit</button>
+                        <button className={s.margin} onClick={() => setRoom(rooms[0]._id)}>restart</button>
+                        <button className={s.margin} onClick={() => setEditMode(true)}>edit</button>
 
                         <GetRooms
                             setRooms={setRooms}
@@ -60,7 +61,7 @@ const Quest = () => {
                     <div>
                         <input value={fileName} onChange={e => setFileName(e.currentTarget.value)}/>
                         <button onClick={save}>save</button>
-                        <button onClick={() => setEditMode(false)}>cancel</button>
+                        <button className={s.margin} onClick={() => setEditMode(false)}>cancel</button>
                     </div>
                 )
             }

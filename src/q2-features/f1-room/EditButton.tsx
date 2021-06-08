@@ -1,5 +1,6 @@
 import React from 'react'
 import {NextButtonType, RoomType} from '../../q1-main/m2-quest/RoomType'
+import s from './Room.module.css'
 
 type EditButtonPropsType = {
     b: NextButtonType
@@ -12,9 +13,10 @@ const EditButton: React.FC<EditButtonPropsType> = (
     {b, newButtons, setButtons, rooms}
 ) => {
     return (
-        <div key={b._id}>
+        <div key={b._id} className={s.row}>
             <textarea
                 value={b.title}
+                className={s.w50}
                 onChange={e => {
                     b.title = e.currentTarget.value
                     setButtons([...newButtons])

@@ -26,7 +26,7 @@ export const defRooms: RoomType[] = [
             },
         ],
         hiddenTitle: 'pre-start-room',
-        text: 'pre-start room for better dev (check all rooms) and text about quest',
+        text: 'example quest: pre-start room for better dev (check all rooms) and text about quest',
         _id: 'a7c19ba0-c859-11eb-ac91-3933f47cd1ad'
     },
     {
@@ -57,7 +57,7 @@ export const defRooms: RoomType[] = [
             },
         ],
         hiddenTitle: 'all-rooms',
-        text: 'button in all rooms for dev',
+        text: 'buttons in all rooms for dev',
         _id: '5b62de30-c85a-11eb-ac91-3933f47cd1ad',
     },
     {
