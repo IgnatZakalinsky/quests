@@ -6,13 +6,11 @@ export type NextButtonType = {
     next: string
 }
 
-export class RoomType {
-    constructor(
-        public _id: string,
-        public hiddenTitle: string,
-        public text: string,
-        public buttons: NextButtonType[]) {
-    }
+export type RoomType = {
+    _id: string
+    hiddenTitle: string
+    text: string
+    buttons: NextButtonType[]
 }
 
 const v = [v1(), v1(), v1(), v1()] // for tests
